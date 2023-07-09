@@ -10,8 +10,8 @@ namespace TaskINNO.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>();
+            
 
 
             services.AddScoped<IAppDbContext, AppDbContext>();
