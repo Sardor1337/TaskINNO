@@ -80,6 +80,7 @@ namespace TaskINNO.Application.Services
                     CreateAt = entity.CreateAt,
                     CategoryId = entity.CategoryId
                 })
+                .Where(x => x.CategoryId == id)
                 .ToListAsync();
         }
 
