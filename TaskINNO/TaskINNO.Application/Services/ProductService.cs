@@ -20,8 +20,13 @@ namespace TaskINNO.Application.Services
             _appDbContext = appDbContext;
         }
 
-        public async Task CreateAsync(CreateProductModel model)
+        public async Task<int> CreateAsync(CreateProductModel model)
         {
+            var res = await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == model.CategoryId);
+            if (res == null)
+            {
+                return 0;
+            }
             var entity = new Product()
             {
                 Name = model.Name,
@@ -32,6 +37,8 @@ namespace TaskINNO.Application.Services
 
             _appDbContext.Products.Add(entity);
             await _appDbContext.SaveChangesAsync();
+
+            return 1;
         }
 
         public async Task<int> DeleteAsync(int id)
@@ -71,6 +78,7 @@ namespace TaskINNO.Application.Services
 
         public async Task<List<ProductViewModel>> GetByCategoryIdAsync(int categoryId)
         {
+            
             return await _appDbContext.Products
                 .Where(x => x.CategoryId == categoryId)
                 .Select(entity => new ProductViewModel()

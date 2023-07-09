@@ -20,8 +20,11 @@ namespace TaskINNO.Api.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromQuery] CreateProductModel model)
         {
-            await _productService.CreateAsync(model);
-
+            int result = await _productService.CreateAsync(model);
+            if(result == 0)
+            {
+                return NotFound();
+            }
             return Ok();
         }
 
