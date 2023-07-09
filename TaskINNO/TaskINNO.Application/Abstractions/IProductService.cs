@@ -14,5 +14,6 @@ namespace TaskINNO.Application.Abstractions
         Task CreateAsync(CreateProductModel model);
         Task<int> UpdateAsync(UpdateProductModel model);
         Task<int> DeleteAsync(int id);
+        Task<List<ProductViewModel>> GetByCategoryIdAsync(int categoryId);
     }
 }

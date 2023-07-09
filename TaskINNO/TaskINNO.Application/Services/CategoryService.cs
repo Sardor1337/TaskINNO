@@ -63,10 +63,6 @@ namespace TaskINNO.Application.Services
 
         public async Task<List<CategoryViewModel>> GetPageSizeAsync(int page, int pagesize)
         {
-            if(page < 1)
-            {
-                throw new Exception("Page Exeption");
-            }
 
             return await _appDbContext.Categories
                 .Select(entity => new CategoryViewModel()

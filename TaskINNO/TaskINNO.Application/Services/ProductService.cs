@@ -49,6 +49,7 @@ namespace TaskINNO.Application.Services
             return 1;
         }
 
+
         public async Task<ProductViewModel> GetByIdAsync(int id)
         {
             var entity = await _appDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
@@ -66,6 +67,20 @@ namespace TaskINNO.Application.Services
                 CreateAt = entity.CreateAt,
                 CategoryId = entity.CategoryId
             };
+        }
+
+        public async Task<List<ProductViewModel>> GetByCategoryIdAsync(int id)
+        {
+            return await _appDbContext.Products
+                .Select(entity => new ProductViewModel()
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Price = entity.Price,
+                    CreateAt = entity.CreateAt,
+                    CategoryId = entity.CategoryId
+                })
+                .ToListAsync();
         }
 
         public async Task<List<ProductViewModel>> GetPageSizeAsync(int page, int pagesize)
