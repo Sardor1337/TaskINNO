@@ -11,6 +11,7 @@ namespace TaskINNO.Application.Abstractions
     {
         Task<CategoryViewModel> GetByIdAsync(int id);
         Task<List<CategoryViewModel>> GetPageSizeAsync(int page, int pagesize);
+        
         Task CreateAsync(CreateCategoryModel model);
         Task<int> UpdateAsync(UpdateCategoryModel model);
         Task<int> DeleteAsync(int id);

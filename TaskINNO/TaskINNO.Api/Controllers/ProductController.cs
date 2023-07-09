@@ -69,14 +69,14 @@ namespace TaskINNO.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("{CategoryId}")]
-        public async Task<IActionResult> GetByCategoryId(int categoryId1)
+         [HttpGet("getby/{categoryId}")]
+        public async Task<IActionResult> NotName(int categoryId)
         {
-            var product = await _productService.GetByCategoryIdAsync(categoryId1);
-            
-            return Ok(product);
-        }
+            var result = await _productService.GetByCategoryIdAsync(categoryId);
 
+            return Ok(result);
+        }
+ 
 
     }
 }

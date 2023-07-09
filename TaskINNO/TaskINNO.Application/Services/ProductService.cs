@@ -69,9 +69,10 @@ namespace TaskINNO.Application.Services
             };
         }
 
-        public async Task<List<ProductViewModel>> GetByCategoryIdAsync(int id)
+        public async Task<List<ProductViewModel>> GetByCategoryIdAsync(int categoryId)
         {
             return await _appDbContext.Products
+                .Where(x => x.CategoryId == categoryId)
                 .Select(entity => new ProductViewModel()
                 {
                     Id = entity.Id,
@@ -80,7 +81,6 @@ namespace TaskINNO.Application.Services
                     CreateAt = entity.CreateAt,
                     CategoryId = entity.CategoryId
                 })
-                .Where(x => x.CategoryId == id)
                 .ToListAsync();
         }
 
