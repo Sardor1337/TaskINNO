@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TaskINNO.Application.Abstractions;
@@ -33,17 +34,19 @@ namespace TaskINNO.Application.Services
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var entity = await _appDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (entity == null)
+            if(entity == null)
             {
-                throw new Exception("Not found");
+                return 0;
             }
+            
 
             _appDbContext.Products.Remove(entity);
             await _appDbContext.SaveChangesAsync();
+
+            return 1;
         }
 
         public async Task<ProductViewModel> GetByIdAsync(int id)
@@ -52,7 +55,7 @@ namespace TaskINNO.Application.Services
 
             if(entity == null)
             {
-                throw new Exception("Not Found");
+                return new ProductViewModel();
             }
 
             return new ProductViewModel()
@@ -67,10 +70,6 @@ namespace TaskINNO.Application.Services
 
         public async Task<List<ProductViewModel>> GetPageSizeAsync(int page, int pagesize)
         {
-            if (page < 1)
-            {
-                throw new Exception("Page Exeption");
-            }
 
             return await _appDbContext.Products
                 .Select(entity => new ProductViewModel()
@@ -81,18 +80,18 @@ namespace TaskINNO.Application.Services
                     CreateAt = entity.CreateAt,
                     CategoryId = entity.CategoryId
                 })
-                .Skip((page - 1) * 10)
+                .Skip((page - 1) * pagesize)
                 .Take(pagesize)
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(UpdateProductModel model)
+        public async Task<int> UpdateAsync(UpdateProductModel model)
         {
             var entity = await _appDbContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id);
 
             if(entity == null)
             {
-                throw new Exception("Not found");
+                return 0;
             }
 
             entity.Name = model.Name ?? entity.Name;
@@ -102,6 +101,8 @@ namespace TaskINNO.Application.Services
 
             _appDbContext.Products.Update(entity);
             await _appDbContext.SaveChangesAsync();
+
+            return 1;
         }
     }
 }

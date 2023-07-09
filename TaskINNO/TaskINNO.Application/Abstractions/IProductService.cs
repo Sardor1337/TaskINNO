@@ -12,7 +12,7 @@ namespace TaskINNO.Application.Abstractions
         Task<ProductViewModel> GetByIdAsync(int id);
         Task<List<ProductViewModel>> GetPageSizeAsync(int page, int pagesize);
         Task CreateAsync(CreateProductModel model);
-        Task UpdateAsync(UpdateProductModel model);
-        Task DeleteAsync(int id);
+        Task<int> UpdateAsync(UpdateProductModel model);
+        Task<int> DeleteAsync(int id);
     }
 }

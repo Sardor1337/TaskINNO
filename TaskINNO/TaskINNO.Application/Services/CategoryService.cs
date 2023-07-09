@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TaskINNO.Application.Abstractions;
@@ -30,26 +31,27 @@ namespace TaskINNO.Application.Services
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var entity = await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity == null)
             {
-                throw new Exception("Not Found");
+                return 0;
             }
 
             _appDbContext.Categories.Remove(entity);
             await _appDbContext.SaveChangesAsync();
+
+            return 1;
         }
 
         public async Task<CategoryViewModel> GetByIdAsync(int id)
         {
             var entity = await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
-
             if(entity == null)
             {
-                throw new Exception("Not Found");
+                return new CategoryViewModel();
             }
 
             return new CategoryViewModel()
@@ -72,24 +74,26 @@ namespace TaskINNO.Application.Services
                     Id = entity.Id,
                     Name = entity.Name,
                 })
-                .Skip((page - 1) * 10)
+                .Skip((page - 1) * pagesize)
                 .Take(pagesize)
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(UpdateCategoryModel model)
+        public async Task<int> UpdateAsync(UpdateCategoryModel model)
         {
             var entity = await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id);
 
             if (entity == null)
             {
-                throw new Exception("Not found");
+                return 0;
             }
 
             entity.Name = model.Name ?? entity.Name;
 
             _appDbContext.Categories.Update(entity);
             await _appDbContext.SaveChangesAsync();
+
+            return 1;
         }
     }
 }

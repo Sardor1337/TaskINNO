@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using TaskINNO.Application.Abstractions;
 using TaskINNO.Application.Models;
 
@@ -28,6 +29,10 @@ namespace TaskINNO.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var category = await _categoryService.GetByIdAsync(id);
+            if(category.Name == null)
+            {
+                return NotFound();
+            }
 
             return Ok(category);
         }
@@ -43,7 +48,12 @@ namespace TaskINNO.Api.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromQuery] UpdateCategoryModel model)
         {
-            await _categoryService.UpdateAsync(model);
+            int result = await _categoryService.UpdateAsync(model);
+
+            if (result == 0)
+            {
+                return NotFound();
+            }
 
             return Ok();
         }
@@ -51,7 +61,11 @@ namespace TaskINNO.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete( int id)
         {
-            await _categoryService.DeleteAsync(id);
+            int result = await _categoryService.DeleteAsync(id);
+            if(result == 0)
+            {
+                return NotFound();
+            }
 
             return Ok();
         }

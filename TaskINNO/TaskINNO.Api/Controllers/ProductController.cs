@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskINNO.Application.Abstractions;
 using TaskINNO.Application.Models;
+using TaskINNO.Domain.Entities;
 
 namespace TaskINNO.Api.Controllers
 {
@@ -28,7 +29,10 @@ namespace TaskINNO.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _productService.GetByIdAsync(id);
-
+            if (product.Name == null)
+            {
+                return NotFound();
+            }
             return Ok(product);
         }
 
@@ -43,15 +47,24 @@ namespace TaskINNO.Api.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromQuery] UpdateProductModel model)
         {
-            await _productService.UpdateAsync(model);
+            int result = await _productService.UpdateAsync(model);
 
+            if (result == 0)
+            {
+                return NotFound();
+            }
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _productService.DeleteAsync(id);
+            int result = await _productService.DeleteAsync(id);
+
+            if (result == 0)
+            {
+                return NotFound();
+            }
 
             return Ok();
         }
